@@ -19,6 +19,7 @@ public:
 
     virtual void StartFire();
     void StopFire();
+    void PrevWeapon();
     virtual void NextWeapon();
     void Reload();
 

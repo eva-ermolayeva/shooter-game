@@ -101,6 +101,16 @@ void USTUWeaponComponent::StopFire()
     CurrentWeapon->StopFire();
 }
 
+void USTUWeaponComponent::PrevWeapon()
+{
+    if (!CanEquip()) return;
+
+    CurrentWeaponIndex = (CurrentWeaponIndex - 1) < 0 //
+                             ? Weapons.Num() - 1
+                             : (CurrentWeaponIndex - 1) % Weapons.Num();
+    EquipWeapon();
+}
+
 void USTUWeaponComponent::NextWeapon()
 {
     if (!CanEquip()) return;
