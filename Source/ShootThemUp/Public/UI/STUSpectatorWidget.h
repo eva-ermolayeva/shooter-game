@@ -1,0 +1,17 @@
+// Shooter Game. All Rights, If Any, Reserved.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Blueprint/UserWidget.h"
+#include "STUSpectatorWidget.generated.h"
+
+UCLASS()
+class SHOOTTHEMUP_API USTUSpectatorWidget : public UUserWidget
+{
+    GENERATED_BODY()
+
+public:
+    UFUNCTION(BlueprintCallable, Category = "UI")
+    bool GetRespawnRemainingSeconds(float& RemainingSeconds) const;
+};

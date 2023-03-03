@@ -1,0 +1,41 @@
+// Shooter Game. All Rights, If Any, Reserved.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "GameFramework/HUD.h"
+#include "STUCoreTypes.h"
+#include "STUGameHUD.generated.h"
+
+class USTUBaseWidget;
+
+UCLASS()
+class SHOOTTHEMUP_API ASTUGameHUD : public AHUD
+{
+    GENERATED_BODY()
+
+public:
+    virtual void DrawHUD() override;
+
+protected:
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+    TSubclassOf<UUserWidget> PlayerHUDWidgetClass;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+    TSubclassOf<UUserWidget> PauseWidgetClass;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+    TSubclassOf<UUserWidget> GameOverWidgetClass;
+
+    virtual void BeginPlay() override;
+
+private:
+    UPROPERTY()
+    TMap<ESTUMatchState, USTUBaseWidget*> GameWidgets;
+
+    UPROPERTY()
+    USTUBaseWidget* CurrentDisplayedWidget = nullptr;
+
+    void DrawCrossHair();
+    void OnMatchStateChanged(ESTUMatchState NewState);
+};
