@@ -3,9 +3,11 @@ DerivedDataCache
 Intermediate
 Saved
 Build
+enc_temp_folder
 .vscode
 .vs
 *.VC.db
+*.VC.opendb
 *.opensdf
 *.opendb
 *.sdf
@@ -13,3 +15,6 @@ Build
 *.suo
 *.xcodeproj
 *.xcworkspace
+*_BuiltData.uasset
+*.exe
+*.bak
