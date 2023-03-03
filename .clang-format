@@ -11,4 +11,4 @@ AllowShortBlocksOnASingleLine: false
 AllowShortIfStatementsOnASingleLine: AllIfsAndElse
 AllowShortFunctionsOnASingleLine: Inline
 AlignAfterOpenBracket: DontAlign
-pointeralignment: left
+PointerAlignment: Left

@@ -47,10 +47,12 @@ public:
 private:
     FVector InitialLocation;
     FTimerHandle RespawnTimerHandle;
+    FTimerHandle CheckOverlapTimerHandle;
     mutable FCriticalSection RespawnGuard;
 
     virtual bool TryGivePickupTo(APawn* PlayerPawn);
     void Despawn();
     void Respawn();
     void HandleMovement();
+    void CheckOverlappingActors();
 };

@@ -15,6 +15,7 @@ ASTUBasePickup::ASTUBasePickup()
     CollisionComponent->SetSphereRadius(50.0f);
     CollisionComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
     CollisionComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+    CollisionComponent->SetGenerateOverlapEvents(true);
     SetRootComponent(CollisionComponent);
 }
 
@@ -25,8 +26,9 @@ void ASTUBasePickup::BeginPlay()
     check(CollisionComponent);
 
     InitialLocation = GetActorLocation();
-
     AddActorLocalRotation(FRotator(0.0f, FMath::RandRange(0.0f, 180.0f), 0.0f));
+
+    GetWorldTimerManager().SetTimer(CheckOverlapTimerHandle, this, &ASTUBasePickup::CheckOverlappingActors, 0.5f, true);
 }
 
 void ASTUBasePickup::NotifyActorBeginOverlap(AActor* OtherActor)
@@ -57,9 +59,14 @@ bool ASTUBasePickup::TryGivePickupTo(APawn* PlayerPawn)
 
 void ASTUBasePickup::Despawn()
 {
+    GetWorldTimerManager().PauseTimer(CheckOverlapTimerHandle);
+
     UGameplayStatics::PlaySoundAtLocation(GetWorld(), PickupTakenSound, GetActorLocation());
     CollisionComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
-    GetRootComponent()->SetVisibility(false, true);
+    if (GetRootComponent())
+    {
+        GetRootComponent()->SetVisibility(false, true);
+    }
 
     GetWorldTimerManager().SetTimer(RespawnTimerHandle, this, &ASTUBasePickup::Respawn, RespawnTime);
 }
@@ -67,8 +74,21 @@ void ASTUBasePickup::Despawn()
 void ASTUBasePickup::Respawn()
 {
     AddActorLocalRotation(FRotator(0.0f, FMath::RandRange(0.0f, 180.0f), 0.0f));
-    CollisionComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
-    GetRootComponent()->SetVisibility(true, true);
+    if (GetRootComponent())
+    {
+        GetRootComponent()->SetVisibility(true, true);
+    }
+
+    // delay to let player see pickup before it'll despawn if player stays on pickup respawn point
+    FTimerDelegate OnDelayTimerDelegate;
+    OnDelayTimerDelegate.BindLambda(
+        [this]()
+        {
+            CollisionComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+            GetWorldTimerManager().UnPauseTimer(CheckOverlapTimerHandle);
+        });
+    FTimerHandle DelayTimerHandle;
+    GetWorldTimerManager().SetTimer(DelayTimerHandle, OnDelayTimerDelegate, 0.5f, false);
 }
 
 void ASTUBasePickup::HandleMovement()
@@ -83,4 +103,16 @@ void ASTUBasePickup::HandleMovement()
     }
 
     AddActorLocalRotation(FRotator(0.0f, RotationYaw, 0.0f));
+}
+
+void ASTUBasePickup::CheckOverlappingActors()
+{
+    TArray<AActor*> OverlappingActors;
+    GetOverlappingActors(OverlappingActors);
+    if (OverlappingActors.Num() == 0) return;
+
+    if (TryGivePickupTo(Cast<APawn>(OverlappingActors[0])))
+    {
+        Despawn();
+    }
 }
