@@ -61,7 +61,6 @@ void ASTUProjectile::OnProjectileHit(
         GetController(),                            //
         bDoFullDamage);
 
-    // DrawDebugSphere(GetWorld(), GetActorLocation(), DamageRadius, 32, FColor::Red, false, 5.0f);
     WeaponFXComponent->PlayImpactFX(Hit);
 
     // Delay for smoother trace FX

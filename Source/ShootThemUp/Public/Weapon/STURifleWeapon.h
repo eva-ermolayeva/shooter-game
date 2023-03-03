@@ -31,13 +31,7 @@ public:
 
 protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Damage", meta = (ClampMin = "0.0", ClampMax = "100.0"))
-    float BasicDamageAmount = 10.0f;
-
-    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Damage", meta = (ClampMin = "0.0", ClampMax = "100.0"))
-    float HeadshotDamageAmount = 40.0f;
-
-    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Damage")
-    FName HeadBoneName = "b_head";
+    float DamageAmount = 10.0f;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Damage", meta = (ClampMin = "0.0", ClampMax = "10.0"))
     float TimeBetweenShots = 0.1f;
@@ -80,5 +74,5 @@ private:
     void MakeDamage(FHitResult& HitResult);
     void InitializeFX();
     void SetFXActive(bool IsActive);
-    void SrawnTraceFX(FVector TraceStart, FVector TraceEnd);
+    void SpawnTraceFX(FVector TraceStart, FVector TraceEnd);
 };

@@ -11,6 +11,7 @@
 #include "NiagaraComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
+#include "STUUtils.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogRiffleWeapon, All, All)
 
@@ -109,17 +110,11 @@ void ASTURifleWeapon::MakeShot()
     FVector TraceFXEnd = TraceEnd;
     if (HitResult.bBlockingHit)
     {
-        // if (!IsNotBackwardShot(HitResult))
-        //{
-        //     DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::White, false, 3.0f, 0, 2.0f);
-        //     return;
-        // }
         TraceFXEnd = HitResult.ImpactPoint;
         MakeDamage(HitResult);
-        WeaponFXComponent->PlayImpactFX(HitResult);
     }
 
-    SrawnTraceFX(GetMuzzleWorldLocation(), TraceFXEnd);
+    SpawnTraceFX(GetMuzzleWorldLocation(), TraceFXEnd);
 
     DecreaseAmmo();
 }
@@ -149,12 +144,14 @@ void ASTURifleWeapon::MakeDamage(FHitResult& HitResult)
     const auto DamagedActor = HitResult.GetActor();
     if (!DamagedActor || !DamagedActor->IsA<ASTUBaseCharacter>()) return;
 
-    auto FinalDamage = BasicDamageAmount;
-    if (HitResult.BoneName == HeadBoneName) FinalDamage = HeadshotDamageAmount;
+    const auto IsEnemy = STUUtils::AreEnemies(GetController(), Cast<APawn>(HitResult.GetActor())->GetController());
+    if (!IsEnemy) return;
 
     FPointDamageEvent PointDamageEvent;
     PointDamageEvent.HitInfo = HitResult;
-    HitResult.GetActor()->TakeDamage(FinalDamage, PointDamageEvent, GetController(), this);
+    HitResult.GetActor()->TakeDamage(DamageAmount, PointDamageEvent, GetController(), this);
+
+    WeaponFXComponent->PlayImpactFX(HitResult);
 }
 
 void ASTURifleWeapon::InitializeFX()
@@ -185,7 +182,7 @@ void ASTURifleWeapon::SetFXActive(bool IsActive)
     }
 }
 
-void ASTURifleWeapon::SrawnTraceFX(FVector TraceStart, FVector TraceEnd)
+void ASTURifleWeapon::SpawnTraceFX(FVector TraceStart, FVector TraceEnd)
 {
     auto TraceFXComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), TraceFX, TraceStart);
     if (TraceFXComponent)
