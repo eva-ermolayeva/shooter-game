@@ -11,12 +11,6 @@ void USTUPlayerHUDWidget::NativeOnInitialized()
 {
     Super::NativeOnInitialized();
 
-    // const auto HealthComponent = STUUtils::GetSTUPlayerComponent<USTUHealthComponent>(GetOwningPlayerPawn());
-    // if (HealthComponent)
-    //{
-    //     HealthComponent->OnHealthChange.AddUObject(this, &USTUPlayerHUDWidget::OnHealthChanged);
-    // }
-
     if (GetOwningPlayer())
     {
         GetOwningPlayer()->GetOnNewPawnNotifier().AddUObject(this, &USTUPlayerHUDWidget::OnNewPawn);

@@ -11,7 +11,6 @@ struct FAmmoData
 {
     GENERATED_USTRUCT_BODY()
 
-    // public:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
     int32 Bullets;
 
@@ -143,7 +142,6 @@ struct FLevelData
     UTexture2D* LevelThumbnail;
 };
 
-//DECLARE_MULTICAST_DELEGATE_OneParam(FOnLevelSelectedSignature, const FLevelData&);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnLevelSelectedSignature, const int32);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnLevelHoveredSignature, const int32);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnLevelUnhoveredSignature, const int32);

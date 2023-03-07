@@ -40,6 +40,8 @@ void ASTUAICharacter::BeginPlay()
     Super::BeginPlay();
 
     check(HealthWidgetComponent);
+
+    OnHealthChange(HealthComponent->GetHealth());
 }
 
 void ASTUAICharacter::OnDeath()

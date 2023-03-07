@@ -4,7 +4,6 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/STUCharacterMovementComponent.h"
 #include "Components/STUHealthComponent.h"
-#include "Components/TextRenderComponent.h"
 #include "Components/STUWeaponComponent.h"
 #include "Components/STUAIWeaponComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -22,10 +21,6 @@ ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& ObjInit)
 
     HealthComponent = CreateDefaultSubobject<USTUHealthComponent>("HealthComponent");
     WeaponComponent = CreateDefaultSubobject<USTUWeaponComponent>("WeaponComponent");
-
-    // HealthTextComponent = CreateDefaultSubobject<UTextRenderComponent>("TextRenderComponent");
-    // HealthTextComponent->SetupAttachment(GetRootComponent());
-    // HealthTextComponent->SetOwnerNoSee(true);
 }
 
 void ASTUBaseCharacter::TurnOff()
@@ -57,10 +52,7 @@ void ASTUBaseCharacter::BeginPlay()
     // check works only in debug and dev builds
     check(GetMesh());
     check(HealthComponent);
-    // check(HealthTextComponent);
-    check(GetCharacterMovement());
 
-    OnHealthChange(HealthComponent->GetHealth());
     HealthComponent->OnDeath.AddUObject(this, &ASTUBaseCharacter::OnDeath);
     HealthComponent->OnHealthChange.AddUObject(this, &ASTUBaseCharacter::OnHealthChange);
 
@@ -93,11 +85,6 @@ void ASTUBaseCharacter::OnGroundLanded(const FHitResult& Hit)
     FPointDamageEvent PointDamageEvent;
     const auto FinalDamage = FMath::GetMappedRangeValueClamped(LandedDamageVelocity, LandedDamage, FallVelocityZ);
     TakeDamage(FinalDamage, PointDamageEvent, nullptr, nullptr);
-}
-
-void ASTUBaseCharacter::OnHealthChange(float Health)
-{
-    // HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
 }
 
 void ASTUBaseCharacter::OnDeath()

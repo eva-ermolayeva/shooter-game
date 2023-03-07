@@ -87,9 +87,6 @@ bool ASTUPlayerCharacter::IsObstacleOnRight() const
     FCollisionQueryParams CollisionParams;
     CollisionParams.AddIgnoredActor(this);
 
-    // DrawDebugBox(
-    //     GetWorld(), CollisionBoxCenter, FVector(10.0f, 15.0f, 10.0f), FQuat(GetViewRotation()), FColor::Green, false, 1.0f, 0, 1.0f);
-
     return GetWorld()->SweepSingleByChannel(HitResult, CollisionBoxCenter, CollisionBoxCenter, FQuat(GetViewRotation()),
         ECollisionChannel::ECC_Visibility, CollisionBox, CollisionParams);
 }

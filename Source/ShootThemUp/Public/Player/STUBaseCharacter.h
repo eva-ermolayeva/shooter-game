@@ -7,7 +7,6 @@
 #include "STUBaseCharacter.generated.h"
 
 class USTUHealthComponent;
-// class UTextRenderComponent;
 class USTUWeaponComponent;
 class USoundCue;
 
@@ -17,7 +16,6 @@ class SHOOTTHEMUP_API ASTUBaseCharacter : public ACharacter
     GENERATED_BODY()
 
 public:
-    // Sets default values for this character's properties
     ASTUBaseCharacter(const FObjectInitializer& ObjInit);
 
     UFUNCTION(BlueprintCallable)
@@ -33,9 +31,6 @@ protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
     USTUHealthComponent* HealthComponent;
 
-    // UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-    // UTextRenderComponent* HealthTextComponent;
-
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
     USTUWeaponComponent* WeaponComponent;
 
@@ -49,10 +44,10 @@ protected:
     float LifeSpanOnDeath = 5.0f;
 
     UPROPERTY(EditDefaultsOnly, Category = "Damage")
-    FVector2D LandedDamage = FVector2D(10.0f, 100.0f);
+    FVector2D LandedDamage = FVector2D(5.0f, 100.0f);
 
     UPROPERTY(EditDefaultsOnly, Category = "Damage")
-    FVector2D LandedDamageVelocity = FVector2D(900.0f, 1200.0f);
+    FVector2D LandedDamageVelocity = FVector2D(700.0f, 2500.0f);
 
     UPROPERTY(EditDefaultsOnly, Category = "Material")
     FName TeamMarkerMatColorName = "Paint Color";
@@ -62,7 +57,7 @@ protected:
 
     virtual void BeginPlay() override;
     virtual void OnDeath();
-    virtual void OnHealthChange(float Health);
+    virtual void OnHealthChange(float Health) {}
 
 private:
     UFUNCTION()

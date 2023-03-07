@@ -7,8 +7,6 @@
 #include "STUGameModeBase.h"
 #include "PhysicalMaterials/PhysicalMaterial.h"
 #include "Perception/AISense_Damage.h"
-// #include "Dev/STUFireDamageType.h"
-// #include "Dev/STUIceDamageType.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogHealthComponent, All, All)
 
@@ -74,20 +72,6 @@ void USTUHealthComponent::ApplyDamage(float Damage, AController* InstigatedBy)
 
     PlayCameraShake();
     ReportDamageEvent(Damage, InstigatedBy);
-
-    /*
-    if (DamageType)
-    {
-        if (DamageType->IsA<USTUFireDamageType>())
-        {
-            UE_LOG(LogHealthComponent, Display, TEXT("So hot!"));
-        }
-        else if (DamageType->IsA<USTUIceDamageType>())
-        {
-            UE_LOG(LogHealthComponent, Display, TEXT("Freezing!"));
-        }
-    }
-    */
 }
 
 float USTUHealthComponent::GetModifiedDamage(AActor* DamagedActor, float Damage, const FName& BoneName)
