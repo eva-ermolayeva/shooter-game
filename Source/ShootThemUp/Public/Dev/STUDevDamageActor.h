@@ -6,13 +6,14 @@
 #include "GameFramework/Actor.h"
 #include "STUDevDamageActor.generated.h"
 
+class UNiagaraComponent;
+
 UCLASS()
 class SHOOTTHEMUP_API ASTUDevDamageActor : public AActor
 {
     GENERATED_BODY()
 
 public:
-    // Sets default values for this actor's properties
     ASTUDevDamageActor();
 
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
@@ -28,16 +29,20 @@ public:
     bool DoFullDamage = false;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    FColor SphereColor = FColor::Red;
+    bool EnableDebugSphere = false;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (EditCondition = "!EnableDebugSphere"))
+    FColor DebugSphereColor = FColor::Red;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     TSubclassOf<UDamageType> DamageType;
 
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "VFX")
+    UNiagaraComponent* VFXNiagaraComponent;
+
 protected:
-    // Called when the game starts or when spawned
     virtual void BeginPlay() override;
 
 public:
-    // Called every frame
     virtual void Tick(float DeltaTime) override;
 };
